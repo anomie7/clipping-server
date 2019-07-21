@@ -19,7 +19,7 @@ public class CategoryDto {
 		return CategoryDto.builder().id(category.getId())
 									.name(category.getName())
 									.orderNo(category.getOrderNo())
-									.postCount(category.getPosts().size())
+									.postCount((int) category.getPosts().stream().filter(post ->!post.isDeleted()).count())
 									.deleted(category.isDeleted())
 									.build();
 	}
