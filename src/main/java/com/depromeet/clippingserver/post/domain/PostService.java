@@ -90,10 +90,10 @@ public class PostService {
 		if (keyword == null || keyword.equals("")) {
 			post = postRepository.findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(userId, pageable);
 		} else {
-			post = postRepository.findByUserIdAndTitleContainingIgnoreCaseAndPersonalTitleContainingIgnoreCaseAndDeletedFalse(userId, keyword,
+			post = postRepository.searchAnd(userId, keyword,
 					keyword, pageable);
 			if (post.getTotalElements() == 0) {
-				post = postRepository.findByUserIdAndTitleContainingIgnoreCaseOrPersonalTitleContainingIgnoreCaseAndDeletedFalse(userId, keyword,
+				post = postRepository.searchOr(userId, keyword,
 						keyword, pageable);
 			}
 		}

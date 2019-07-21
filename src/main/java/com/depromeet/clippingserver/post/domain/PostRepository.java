@@ -13,10 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 public interface PostRepository extends JpaRepository<Post, Long> {
 	Page<Post> findByUserIdAndDeletedFalseOrderByUpdatedDateDesc(Long userId, Pageable pageable);
 	
-	Page<Post> findByUserIdAndTitleContainingIgnoreCaseAndPersonalTitleContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String personalTitle, Pageable pageable);
+	Page<Post> findByDeletedFalseAndUserIdAndTitleContainingIgnoreCaseAndPersonalTitleContainingIgnoreCase(Long userId, String title, String personalTitle, Pageable pageable);
 
-	Page<Post> findByUserIdAndTitleContainingIgnoreCaseOrPersonalTitleContainingIgnoreCaseAndDeletedFalse(Long userId, String title, String personalTitle, Pageable pageable);
-	
+	Page<Post> findByDeletedFalseAndUserIdAndTitleContainingIgnoreCaseOrPersonalTitleContainingIgnoreCase(Long userId, String title, String personalTitle, Pageable pageable);
+
+	@Query("SELECT p FROM Post p WHERE p.deleted = false and p.userId = :userId and (p.title Like %:title% or p.personalTitle Like %:personalTitle%)")
+	Page<Post> searchOr(@Param("userId") Long userId,@Param("title") String title,@Param("personalTitle") String personalTitle, Pageable pageable);
+
+	@Query("SELECT p FROM Post p WHERE p.deleted = false and p.userId = :userId and p.title Like %:title% and p.personalTitle Like %:personalTitle%")
+	Page<Post> searchAnd(@Param("userId") Long userId,@Param("title") String title,@Param("personalTitle") String personalTitle,  Pageable pageable);
+
 	Page<Post> findByUserIdAndDeletedFalseAndIsBookmarkTrueOrderByUpdatedDateDesc(Long userId, Pageable pageable);
 
 	List<Post> findByUserIdAndPersonalTitleContainingAndDeletedFalse(Long userId, String personalTitle);

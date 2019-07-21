@@ -19,7 +19,7 @@ import com.depromeet.clippingserver.category.domain.CategoryRepository;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest @ActiveProfiles("test")
+@SpringBootTest @ActiveProfiles("local")
 @Transactional
 public class PostServiceTest {
 	Long postId = 1L;
@@ -62,8 +62,8 @@ public class PostServiceTest {
 	@Test
 	public void testSearchPost() {
 		PageRequest pageReq = PageRequest.of(0, 5);
-		Long userId = 1L;
-		String keyword = "";
+		Long userId = 8L;
+		String keyword = "NAVER";
 		GetAllPostsResponse posts = postService.searchPost(userId, keyword, pageReq);
 		assertEquals(5, posts.getPosts().size());
 	}
